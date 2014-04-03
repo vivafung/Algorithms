@@ -1,0 +1,110 @@
+% Discription: This code is a simulation of 7 users Distributed Power Control
+% Algorithm used in CDMA networks for interference coordination.
+
+%Variables:   SIR-Signal to Interference+Noise Ratio
+%             H-channel gain matrix; Gamm- Gamm-Required SIR at each receiver; P-power available at each transmitter; N-noise at each receiver
+clc, clear all, clf
+tic;
+global N ITERATION_STEP BETA Noise H Gamma GAMMA_DB
+% filepathPOWER='C:\Users\viva.interomeo-HP\Documents\PWO'; 
+% filepathPROB='C:\Users\viva.interomeo-HP\Documents\PROB'; 
+N=7;
+ITERATION_STEP=7;
+for x=1:10
+actions=[];
+for k=1:N
+    actions=[actions;sym(['a',num2str(k)])];
+end
+disp(actions);
+disp(size(actions));
+% rand('state', 0);
+H=10^(-11)*rand(N,1); 
+disp(H);%H contains channel all channel gains. Channels gains are assumed to be less then 1
+% D denotes the distance of transmitter&receiver pair
+I=ones(N,1);
+for i=1:N
+    I=interference(H,actions);
+end
+Noise=ones(N,1)
+Noise(:,:)=5*(10^(-12));
+% discount factor
+BETA=0.95;
+%prob = [0.662;0.547;0.769];
+prob = rand(N,1);
+disp('prob');
+disp(prob);
+states = zeros(N,1);
+inst_reward = zeros(N,1);
+future_reward = zeros(N,1);
+%target SIR at each receiver, 10log10(0.1)=-10db    3.2mW=5dB
+Gamma=zeros(N,1);
+Gamma(:,:)=3;
+disp(Gamma);
+GAMMA_DB = 10*log10(Gamma);
+for i = 1:N
+    imm_reward = InstReward3(prob,actions,I);
+end
+% at every moment, there are two possible rewards, name them reward1 and reward 2 which reward1 denotes the reward when no state change happens, while reward2 denotes the reward when state changes.
+% calculate the initial power
+alter_prob = 1 - prob;
+reward1 = InstReward3(prob, actions,I);
+reward2 = InstReward3(alter_prob, actions,I);
+total = BETA*(prob.*reward1 + alter_prob.*reward2);
+future_reward = imm_reward + future_reward + total;
+f = sum(future_reward);
+
+objfun = matlabFunction(-f,'vars',{actions});
+    %constraint = a1+a2+a3-50;
+    %confun = matlabFunction(constraint,'vars',{actions},'outputs',{'c','ceq'});
+    % optimization algorithm to find the value of actions to get the min reward
+    % [X,FVAL,EXITFLAG,OUTPUT] = fmincon(FUN,X0,A,B,Aeq,Beq,LB,UB,NONLCON,OPTIONS)
+    % adopt mW as transmitted power unit,eg:100 denotes 100mW
+options = optimset('Algorithm','interior-point','Display','off');
+[X,FVAL,EXITFLAG,OUTPUT] = fmincon(objfun,ones(N,1),ones(1,N),70,[],[],1,70,[],options)
+% give optimization results to actions array
+%actions(:,1) = X;
+actions = double(X);
+SINR=(H.*actions)./(sum(H.*actions)-H.*actions+Noise);
+SINR_DB = 10*log10(SINR);
+for j = 1:ITERATION_STEP
+    for i = 1:N
+        if SINR(i) < Gamma(i)
+            j = j+1;
+            H=10^(-11)*rand(N,1);
+            prob(:,j) = rand(N,1);
+            alter_prob = 1 - prob;
+            temp_actions=[];
+            for l=1:N
+                temp_actions=[temp_actions;sym(['a',num2str(l)])];
+            end
+            temp_I=interference(H,temp_actions);
+            reward1 = InstReward3(prob(:,j), temp_actions, temp_I);
+            reward2 = InstReward3(alter_prob(:,j), temp_actions, temp_I);
+            total = BETA^(j)*(prob(:,j).*reward1 + alter_prob(:,j).*reward2);
+            future_reward = imm_reward + future_reward + total;
+            f = sum(future_reward);
+            objfun = matlabFunction(f,'vars',{temp_actions});
+            %constraint = a1+a2+a3-50;
+            %confun = matlabFunction(constraint,'vars',{actions},'outputs',{'c','ceq'});
+            % optimization algorithm to find the value of actions to get the min reward
+            % [X,FVAL,EXITFLAG,OUTPUT] = fmincon(FUN,X0,A,B,Aeq,Beq,LB,UB,NONLCON,OPTIONS)
+            options = optimset('Algorithm','interior-point','Display','off');
+            [X,FVAL,EXITFLAG,OUTPUT] = fmincon(objfun,ones(N,1),ones(1,N),70,[],[],1,70,[],options)
+            % update transmitted power to the results of optimization
+            temp_actions = double(X);
+            SINR(:,j)=(H.*temp_actions)./(sum(H.*temp_actions)-H.*temp_actions+Noise);
+            SIR_DB = 10*log10(SINR);
+            temp_I=interference(H,temp_actions);
+            reward1 = (-prob(:,j).*log2(prob(:,j)))./(temp_actions-temp_I);
+            reward2 = (-alter_prob(:,j).*log2(alter_prob(:,j)))./(temp_actions-temp_I);
+            total = BETA^(j-1)*(prob(:,j).*reward1 + alter_prob(:,j).*reward2);
+            %             future_reward = immReward + future_reward + total;
+            m = imm_reward + total;
+            temp_future_reward = m;
+            actions = cat(2,actions,temp_actions)
+            actions_db = 10*log10(actions);
+        end
+    end
+end
+toc;
+end
