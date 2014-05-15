@@ -1,0 +1,93 @@
+#include<iostream>
+#include<fstream>
+#include<string>
+#include<vector>
+#include<algorithm>
+#include<sstream>
+
+using namespace std;
+
+vector<string> vec;
+bool ComposedWords(string word, int len)
+{
+  int s = word.length();
+  cout << "The word is:  " << word << endl;
+  cout << "The length of word is:  " << s <<endl;
+  if(s == 0)
+  {return false;}
+
+  for(int i = 1; i <= len; ++i)
+  {
+    if(i == len)
+    {
+      return false;
+    }
+    string str = word.substr(0,i);
+    cout << "The substr is:  " << str << endl;
+    vector<string>::iterator it=std::find(vec.begin(), vec.end(),str);
+    if(ComposedWords(word.substr(i), len))
+    {return true;}
+
+  }
+  return false;
+}
+
+bool compare(string s1, string s2)
+{
+  return s2.length() < s1.length();
+}
+
+void PrintLongestWord(string word[], int n)
+{
+  for(int i = 0; i < n; ++i)
+  {
+    vec.push_back((char*) &word[i]);                                                                                                                   
+    std::sort(vec.begin(), vec.end(), compare);                                                                                                        
+  }
+
+  for(int i = 0; i < n; ++i)                                                                                                                           
+  {
+    if(ComposedWords(word[i], word[i].length()))                                                                                                       
+    {
+      cout << "Longest made of word is: " << word[i] <<endl;
+      return;                                                                                                                                          
+    }
+  }
+}
+
+
+int main()
+{
+  vector<string> vec;                                                                                                                                  
+  //const char *filename = "test.txt";                                                                                                                 
+  ifstream infile;                                                                                                                                     
+  ofstream outfile;                                                                                                                                    
+  
+  //open the file                                                                                                                                      
+  infile.open("test.txt");                                                                                                                             
+  //if infile exists                                                                                                                                   
+  if(!infile)                                                                                                                                          
+  {
+    cout << "infile does not exist." << endl;                                                                                                          
+  }
+
+  string word;
+  char m[1024];                                                                                                                                        
+  //read the word line by line and store into vector                                                                                                   
+  while(infile.getline(m,1024))
+  {
+    infile >> word;                                                                                                                                    
+    vec.push_back(word);                                                                                                                               
+  }
+  infile.close();                                                                                                                                      
+
+  //print vector                                                                                                                                       
+  for(vector<string>::size_type i = 0; i != vec.size() - 1; i++)
+  {
+    cout << i << "th item is:  " << vec[i] << endl;                                                                                                    
+  //start finding the longest word                                                                                                                     
+  int len = 13;                                                                                                                                        
+  PrintLongestWord(&vec[i],len);                                                                                                                       
+  }
+  return 0;
+}
