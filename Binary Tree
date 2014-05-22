@@ -1,0 +1,126 @@
+#define BINARYTREE_H
+
+#include<iostream>
+#include<cstring>
+
+typedef int T;
+
+class BTreeNode
+{
+public:
+  T data;
+  BTreeNode *left;
+  BTreeNode *right;
+};
+
+class BTree
+{
+public:
+  BTreeNode *root;
+  //constructor
+  BTree()
+  {
+    root = NULL;
+  }
+  //copy constructor
+
+  //Deconstructor
+  ~BTree()
+  {delete root;}
+
+  bool isEmpty()
+  {
+    return root == NULL;
+  }
+  //Declare the function of insert, delete, search, traversal
+  void preOrder(BTreeNode*);
+  void inOrder(BTreeNode*);
+  void postOrder(BTreeNode*);
+  void insert(BTreeNode* , T);
+  //void remove(BTreeNode*, T);
+};
+
+#endif
+
+
+=========================================================================
+
+#include<iostream>
+#include<cstring>
+#include "binarytree.h"
+
+BTreeNode::BTreeNode()
+  :left(NULL), right(NULL), data(0);
+void BTree::preOrder(BTreeNode *root)
+{
+  if(root != NULL)
+  {
+    cout << root->val << endl;
+    preOrder(root->left);
+    preOrder(root->right);
+  }
+}
+
+void BTree::inOrder(BTreeNode *root)
+{
+  if(root != NULL)
+  {
+    inOrder(root->left);
+    cout << root->val << endl;
+    inOrder(root->right);
+  }
+
+}
+
+
+void BTree::postOrder(BTreeNode *root)
+{
+  if(root != NULL)
+  {
+    postOrder(root->left);
+    postOrder(root->right);
+    cout << root->val << endl;
+
+  }
+
+}
+
+void BTree::insert(BTreeNode *root, T x)
+{
+  //if tree is empty
+  if(root == NULL)                                                                                                                                     
+  {
+    root = new BTreeNode();                                                                                                                            
+    root->left = NULL;
+    root->right = NULL;                                                                                                                                
+    root->data = x;                                                                                                                                    
+  }
+
+  else if(x > root->data)                                                                                                                              
+  {
+    insert(root->right, x);                                                                                                                            
+  }
+  else if(x < root->left)                                                                                                                              
+  {
+    insert(root->left, x);
+  }
+}
+
+
+====================================================================
+#include<iostream>
+#include<string>
+#include "binarytree.h"
+
+int main()
+{
+  int a[] = {34,18,7,13,52,82,67,58,4,73,72};
+  BTree bst;
+  BTreeNode* root=NULL, *left = NULL, *right = NULL;
+  for(int i = 0; i < 11; i++)
+  {
+    bst.insert(root, a[i]);
+  }
+  return 0;
+}
+~               
