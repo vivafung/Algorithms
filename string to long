@@ -17,5 +17,8 @@ long string_to_number(string str)
   long total = 0;
   for (int j = 0; j < len; j++)
   total = total*10 + (str[j]-48);
+  
+  // Return signed number
+  return sign == '+' ? result : -result;
   return total;
 }
