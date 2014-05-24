@@ -8,14 +8,14 @@ using namespace std;
 long string_to_number(string str)
 {
   if (str == null || str.length() == 0)
-		{
-			return 0;
-		}
+  {
+    return 0;
+  }
 	
-	int len = str.length();
+  int len = str.length();
 	
   long total = 0;
-  for (int j = 0; j < instr.size(); j++)
-  total = total*10 + (instr[ j ]-48);
+  for (int j = 0; j < len; j++)
+  total = total*10 + (str[j]-48);
   return total;
 }
