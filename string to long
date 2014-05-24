@@ -1,0 +1,7 @@
+// -the number can ONLY be between 0--2147483647 -
+//For long int, the number's range should be -2147483648~+2147483647
+//For unsigned long, the number's range should be -2147483648~+2147483647
+
+
+#include <string>
+using namespace std;
