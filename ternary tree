@@ -1,0 +1,116 @@
+#ifndef TERNARYTREE_H                                                                     
+#define TERNARYTREE_H                                                                     
+  
+#include <iostream>                                                                       
+#include <cstring>                                                                        
+
+using namespace std;                                                                      
+typedef int T;
+
+class Node
+{ 
+friend class TernayTree;                                                                  
+public:                                                                                   
+  Node(const T& val, Node* l, Node* r, Node* m)                                           
+    :data(val),
+     left(l),                                                                             
+     right(r),                                                                            
+     mid(m)                                                                               
+     {}                                                                                   
+
+private:                                                                                  
+  T data;
+  Node *left; 
+  Node *right;                                                                            
+  Node *mid;                                                                              
+};
+  
+class TernaryTree                                                                         
+{                                                                                         
+public:
+  //Node* root;
+  //constructor                                                                           
+  TernaryTree()
+  {root = NULL;} 
+    
+  //copy constructor                                                                      
+    
+  //deconstructor                                                                         
+  ~TernaryTree()
+  {clear(TernaryTree* &root);}     
+  
+  private:                                                                                  
+  Node* root;
+  void insert(TernaryTree* &root, const T& x);                                                                                                         
+  void remove(TernaryTree* &root, T& x);                                                                                                               
+  void findMin(TernaryTRee*);                                                                                                                          
+  void clear(TernaryTree*);                                                                                                                            
+  bool isEmpty(){return root == NULL;}                                                                                                                 
+};                                                                                                                                                     
+                                                                                                                                                       
+#endif  
+
+
+=================================================
+#include <iostream>
+#include <string>
+#include "ternarytree.h"
+
+using namespace std;
+typedef int T;
+
+void TernaryTree::insert(TernaryTree* &root, const T& x)
+{
+  //if tree is empty
+  if(root == NULL)
+  {
+    root = new TernaryTree();
+    root->left = NULL;
+    root->mid = NULL;
+    root->right = NULL;
+    root->data = x;
+  }
+
+   else if(x > root->data)
+   {insert(root->right, x);}
+
+   else if(x < root->data)
+   {insert(root->left, x);}
+
+   else(x == root->data)
+   {insert(root->mid, x);}
+
+}
+
+void TernaryTree::clear(TernaryTree* &root)
+{
+  if(root == NULL) {return;}
+  //Recursively clear
+  clear(root->left);
+  clear(root->mid);
+  clear(root->right);
+
+  delete root;
+}
+
+Node* findMin(TernaryTree* &root)
+{
+  //when deleting a node with children,either find the maximum of the left tree or the minimum of the right tree                                       
+  //find out the minimum in the right tree to replace the deleted node                                                                                 
+  if(root != NULL)                                                                                                                                     
+  {                                                                                                                                                    
+    while(root->left != NULL)                                                                                                                          
+      {return findMin(root->left);}                                                                                                                    
+  }                                                                                                                                                    
+  return root;                                                                                                                                         
+}                                                                                                                                                      
+                                                                                                                                                       
+void TernaryTree::remove(TernaryTree* &root, T& x)                                                                                                     
+{                                                                                                                                                      
+  Node* parent;                                                                                                                                        
+  Node* left, right, mid;                                                                                                                              
+  Node* ptr;                                                                                                                                           
+                                                                                                                                                       
+  //if the tree is empty                                                                                                                               
+  if(root == NULL)                                                                                                                                     
+  {return;}                                                          
