@@ -113,4 +113,27 @@ void TernaryTree::remove(TernaryTree* &root, T& x)
                                                                                                                                                        
   //if the tree is empty                                                                                                                               
   if(root == NULL)                                                                                                                                     
-  {return;}                                                          
+  {return;}
+  
+  //if delete the leaf
+  if(root->left == NULL && root->mid == NULL && root->right == NULL)
+  { 
+    ptr = NULL;
+  }
+  
+  //if the ptr has one child
+  if(!((root->left == NULL && root->mid == NULL && root->right == NULL)))
+  {
+    if (child->left) {parent = child->left;}
+    if (child->right) {parent = child->right;}
+  }
+  
+  //if the ptr has two or three children
+  //if ptr has right subtree
+  else if(child->right != NULL)
+  {
+  
+  }
+
+}
+
