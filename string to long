@@ -1,7 +1,14 @@
-// -the number can ONLY be between 0--2147483647 -
 //For long int, the number's range should be -2147483648~+2147483647
-//For unsigned long, the number's range should be -2147483648~+2147483647
+//For unsigned long, the number's range should be 0 ~ 4294967295
+//This program only consider the first case
 
 
 #include <string>
 using namespace std;
+long string_to_number(string str)
+{
+  long total = 0;
+  for (int j = 0; j < instr.size(); j++)
+  total = total*10 + (instr[ j ]-48);
+  return total;
+}
