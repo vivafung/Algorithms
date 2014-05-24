@@ -130,14 +130,14 @@ void TernaryTree::remove(TernaryTree* &root, T& x)
   
   //if the ptr has two or three children
   //if ptr has right subtree
-  else if(child->right != NULL)
+  else if(child->right != NULL && x > root->data)
   {
     ptr->data = findMin(root->right)->data;
     root->right = delete(findMin(root->right, root->right)->data);
   }
   
   //if ptr has middle tree 
-  if (root->mid != null) 
+  else if (root->mid != null) 
   {
     root->mid = delete(root->mid, x);
   }      
