@@ -1,0 +1,59 @@
+//vector [1,2,3]  --- increment-----[1,2,4]
+//[1,9,9]  to [2,0,0]
+
+
+#include <vector>                                                             
+#include <iostream>                                                           
+                                                                              
+using namespace std;                                                          
+using std::cout;                                                              
+                                                                              
+vector<int> vec;                                                              
+                                                                              
+vector<int> increment(vector<int> &vec)                                       
+{                                                                             
+  //vector<int> vec = new vector<int>(vec.size()+1);                          
+  int n=vec.size();                                                           
+  if(n==0)                                                                    
+  {return vec;}                                                               
+  int count=0;                                                                
+  vec[n-1]++;                                                                 
+  for(int i=n-1; i>=0; i--)                                                   
+  {                                                                           
+    if(vec[i] >=10)                                                           
+    {                                                                         
+      vec[i]=0;                                                               
+      count=1;                                                                
+      vec[i-1]=vec[i-1]+count;                                                
+    }                                                                         
+                                                                              
+    else                                                                      
+    {break;}                                                                  
+  }                                                                           
+  return vec;                                                                 
+}                                                                             
+                                                                              
+                                                                              
+/*int main()                                                                  
+{                                                                             
+ cout << "tqrtey" << endl;                                                    
+}*/                                                                           
+                                                                              
+int main()                                                                    
+{                                                                             
+  vector<int> vec;                                                            
+  vec.push_back(1);                                                           
+  vec.push_back(9);                                                           
+  vec.push_back(9);
+  for(int i=0; i < vec.size(); i++)                                                                                                                    
+  {cout << vec[i] << endl;}                                                                                                                            
+  vec.resize(vec.size()+1);                                                                                                                            
+  for(int i=0; i < vec.size(); i++)                                                                                                                    
+  {cout << vec[i] << endl;}                                                                                                                            
+
+  increment(vec);                                                                                                                                      
+  for(int i=0; i < vec.size(); i++)                                                                                                                    
+  {cout << vec[i] << endl;}                                                                                                                            
+  
+  return 0;
+}
