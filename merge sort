@@ -1,0 +1,64 @@
+#include <vector>
+#include <iostream>
+
+using namespace std;
+using std::cout;
+
+
+void merge(int *a, int *b, int ls, int le, int rs, int re)
+{
+  int l_len = le-ls;
+  int r_len = re-rs;
+
+  int i=ls,l=ls,r=rs;
+  for(i=ls;i<le;i++,l++)
+  {b[l]=a[i];}
+
+  for(i=rs;i<re;i++,r++)
+  {b[r]=a[i];}
+
+  for(i=ls,r=0,l=0; l<l_len && r < r_len; i++)
+  {
+    if(a[l] < a[r])
+    {b[i]=a[l];}
+    else
+    {b[i]=a[r];}
+  }
+
+  for(; l<l_len;i++,l++)
+  {b[i]=a[l];}
+  for(; r<r_len;i++,r++)
+  {b[i]=a[r];}
+}
+
+void mergesort(int* a, int* b, int low, int high)
+{
+  if(low > high)
+  {return;}
+
+  int mid = (high+low)/2;                                       
+  mergesort(a,b,low,mid);                                       
+  mergesort(a,b,mid+1,high);
+  merge(a, b, low, mid, mid+1, high);                           
+}
+
+int main(int argc, char ** argv)
+{
+  int num;
+  cout << "input: " << endl;                                    
+  cin >> num;
+  int a[num];                                                   
+  int b[num];                                                   
+
+
+  for(int i=0; i < num; i++)                                    
+  {cout << (i+1) << "::::" << endl;                             
+   cin >> a[i];                                                 
+  }
+  mergesort(a,b,0,num-1);                                       
+  for(int i =0; i<num; i++)                                     
+  {cout << a[i] << "WWW";}
+  cout << endl;                                                 
+  
+  return 0;
+}
