@@ -1,0 +1,50 @@
+#include <iostream>
+
+using namespace std;
+
+void quicksort(int arr[], int left, int right)
+{
+  //choose pivot
+  int i=left, j=right;
+  int temp;
+  int pivot = arr[(left+right)/2];
+  //partition
+  while(i < j)
+  {
+    while(arr[i] < pivot)
+    {i++;}
+    while(arr[j] > pivot)
+    {j--;}
+
+    if(i<=j)
+    {
+      swap(arr[i],arr[j]);
+      i++;
+      j--;
+    }
+  }
+  //recursivly quicksort
+  if(left<j)
+  {quicksort(arr, left, j);}
+  if(i<right)
+  {quicksort(arr, i, right);}
+}
+
+int main()
+{
+  int num;
+  cout << "numbers" << endl;
+  cin >> num;
+  int a[num];                                                 
+  for(int i=0;i<num;i++)                                      
+  {
+    cout << (i+1) << "::" << endl;                            
+    cin >> a[i];                                              
+  }
+
+  quicksort(a,0,num-1);                                       
+  for(int i=0;i<num;i++)
+  {cout << a[i] << "output";}                                 
+
+  return 0;
+}
