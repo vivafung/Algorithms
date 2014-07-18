@@ -1,0 +1,80 @@
+Deduplicate the data in Hadoop
+
+Input: 
+2013-11-01 aa
+2013-11-02 bb
+2013-11-03 cc
+2013-11-04 aa
+2013-11-05 dd
+2013-11-06 dd
+2013-11-07 aa
+2013-11-09 cc
+2013-11-10 ee
+
+2013-11-01 bb 
+2013-11-02 33 
+2013-11-03 cc
+2013-11-04 bb
+2013-11-05 23 
+2013-11-06 dd
+2013-11-07 99 
+2013-11-09 99
+2013-11-10 ee
+
+==================================================================
+package com.t.hadoop;  
+  
+import java.io.IOException;  
+import java.util.HashSet;  
+import java.util.StringTokenizer;  
+  
+import org.apache.hadoop.conf.Configuration;  
+import org.apache.hadoop.fs.Path;  
+import org.apache.hadoop.io.Text;  
+import org.apache.hadoop.mapreduce.Job;  
+import org.apache.hadoop.mapreduce.Mapper;  
+import org.apache.hadoop.mapreduce.Reducer;  
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;  
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;  
+import org.apache.hadoop.util.GenericOptionsParser;  
+
+
+public class Dedup{
+  public static class MyMap extends Mapper<object, Text, Text, Text>{
+    protected void map(Object key, Text value, Context context)
+    throws IOException, InterruptedException{
+    context.write(value, new Text(""));
+    }
+  }
+  
+  public static class MyReducer extends Reducer<Text, Text, Text, Text>{
+      protected void reduce(Text key, Iterable<Text> value, Context context)
+      throws IOException, InterrupedException{
+      context.write(key, new Text(""));   
+    }
+  }
+  
+  public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException{
+    Configuration conf = new Configuration();
+    String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
+    if(otherArgs.length < 2){
+      System.out.printIn("parameter error");
+      System.exit(2);
+    }
+   
+    Job job = new org.apache.hadoop.mapreduce.Job(conf, "Dedup");
+    job.setJarByClass(Dedup.class);
+    job.setMapperClass(MyMap.class);
+    Job.setCombinerClass(MyReducer.class);
+    job.setReducerClass(MyReducer.class);
+    job.setOutputKeyClass(Text.class);
+    Job.setOutputValueClass(Text.class);
+
+    FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
+    FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
+    
+    System.exit(job.waitForCompletion(true)? 0:1);
+  }
+
+}
+
