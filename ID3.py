@@ -18,10 +18,10 @@ def shannonEnt(dataset):
     
     #counting the occurance
     for featureVec in dataset:
-        currentlable = featureVec
-        if currentlable not in lableCounts.keys():
-            lableCounts[currentlable] = 0
-        lableCounts[currentlable] += 1
+        currentlable = featureVec[-1]
+        if currentlable not in list(lableCounts.keys()):
+            list(lableCounts.keys())[currentlable] = 0
+        list(lableCounts.keys())[currentlable] += 1
 
     for key in lableCounts:
         #computing probability
@@ -100,6 +100,17 @@ def createTree(dataset, lable):
     return tree
 
 
+def classify(inputTree,featLabels,testVec):  
+    firstStr = list(inputTree.keys())[0]  
+    secondDict = inputTree[firstStr]  
+    featIndex = featLabels.index(firstStr)  
+    key = testVec[featIndex]  
+    valueOfFeat = secondDict[key]  
+    if isinstance(valueOfFeat, dict):  
+        classLabel = classify(valueOfFeat, featLabels, testVec)  
+    else: classLabel = valueOfFeat  
+    return classLabel
+
 
 def grabTree(filename):
     f = open(filename)
@@ -110,4 +121,12 @@ def storeTree(tree, filename):
     fw = open(filename, 'w')
     pickle.dump(tree,fw)
     fw.close()
-    
+
+
+dataSet = [[1, 1, 'yes'],  
+               [1, 1, 'yes'],  
+               [1, 0, 'no'],  
+               [0, 1, 'no'],  
+               [0, 1, 'no']]
+lables = ['no surfacing','flippers']
+createTree(dataSet, lables)
