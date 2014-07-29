@@ -39,6 +39,16 @@ def splitDate(dataset, axis, value):
             newDataSet.append(newfeatureVec)
     return newDataSet
 
+
+def majorityCnt(classList):  
+    classCount={}  
+    for vote in classList:  
+        if vote not in classCount.keys(): classCount[vote] = 0  
+        classCount[vote] += 1  
+    sortedClassCount = sorted(classCount.iteritems(), key=operator.itemgetter(1), reverse=True)  
+    return sortedClassCount[0][0]  
+
+
 def bestFeatureSelection(dataset):
     #define the base entropy
     numFeature = len(dataset) - 1
@@ -53,7 +63,7 @@ def bestFeatureSelection(dataset):
         UniqueFeature = set(featureList)
 
         for value in UniqueFeature:
-            subdata = splitDate(dataset)
+            subdata = splitDate(dataset, i, value)
             tempProb = len(subdata)/len(dataset)
             newEnt = tempProb * shannonEnt(subdata)
             #computing information gain = base entropy - new entropy
@@ -67,6 +77,28 @@ def bestFeatureSelection(dataset):
 
 
 def createTree(dataset, lable):
+    classList = [example[-1] for example in dataset]
+    #stop splitting when all the features are the same
+    if(classList.count(classList[0]) == len(classList)):
+        return classList[0]
+    #stop splitting when there is no feature left
+    if(len(dataset[0]) == 1):
+        return majorityCnt(classList)
+
+    #define the root of tree
+    root = bestFeatureSelection(dataset)
+    rootLable = lable(root)
+    #define the tree
+    tree = {rootLable: {}}
+    featureValue = [example[root] for example in dataset]
+    uniqueFeatureValue = set(featureValue)
+    #iteratively generate the decision tree
+    for value in uniqueFeatureValue:
+        sublables = lable[:]
+        tree = createTree(splitDate(dataset, root, value), sublables)
+
+    return tree
+
 
 
 def grabTree(filename):
