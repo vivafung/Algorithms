@@ -29,20 +29,7 @@ AT
 TC
 +READ2
 "`
-Please note that input shall be a binary sequence of bytes -- not a string of ‘0’ and ‘1’ characters. An example input file can be downloaded from https://dnanexus.com/ programming_challenges/dna_conversion_samples/input. This example file has 1680 bytes. One can generate different output with different L values. The example output for L = 7, 15, and 80 can also be downloaded from the following locations:
+The example file has 1680 bytes. One can generate different output with different L values. The example output for L = 7, 15, and 80 can also be conducted. 
 
-
-You are given a very, very large plain text file where each line contains a plain text string. The file has at most 1 billion lines; lines may have different lengths, but each line has at most 1000 characters. Your goal is to write a program that will print an arbitrary line from the file. Your program will be run many times (although you don't know exactly how many times it will be run in advance), and you don’t know in advance which lines might be selected. Thus, your solution should be optimized to minimize the runtime for each additional execution. The first execution of the program may take longer than subsequent runs, and you may use additional disk storage to improve performance.
-Your program should take two command-line arguments: the path of the file from which to print lines, and the index of the line you want to print. Your program should write the line to standard output.
-Sample input/output:
-input_file.txt:
-apple
-banana
-orange
-lemon
-$ random_line input_file.txt 3
-on stderr: Writing index to input_file.txt.idx... done. lemon
-$ random_line input_file.txt 2
-orange
-$ random_line input_file.txt 0
-apple
+After encoding DNA sequence, users are given a very large plain text file where each line contains a plain text string. The file has at most 1 billion lines; lines may have different lengths, but each line has at most 1000 characters. The goal is to write a program that will print an arbitrary line from the file. The program will be run many times (although you don't know exactly how many times it will be run in advance), and you don’t know in advance which lines might be selected. Thus, the solution should be optimized to minimize the runtime for each additional execution. The first execution of the program may take longer than subsequent runs, and you may use additional disk storage to improve performance.
+The program can take two command-line arguments: the path of the file from which to print lines, and the index of the line you want to print. 
