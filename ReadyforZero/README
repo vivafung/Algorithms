@@ -1,0 +1,48 @@
+DNA is a long molecule that lies inside the nucleus of a cell, and it can be thought of as a
+very long string consisting of characters in the alphabet {A, C, G, T}. DNA sequencing is the technology that enables reading from DNA molecules and converting them to strings on the output. We are interested in a technology that works in the following way: the DNA molecules in the input are fragmented into pieces of equal length L; each piece is then sequenced by the technology, and its content is encoded in the output. The particular encoding used in the output is the following:
+● The file contains multiple consecutive entries, one per piece.
+● Each piece is represented by L consecutive bytes (1 byte = 8 bits).
+● The first two (most significant) bits of each byte encode the DNA letter:
+○ 00 represents A
+○ 01 represents C
+○ 10 represents G
+○ 11 represents T
+● The last six (least significant) bits of each byte encode the confidence that the readout was correct, also known as the quality score. It is represented as an unsigned 6-bit integer in the range 0 to 63.
+Write a program that takes as input an encoded file as well as the number L, and converts it to a text file of the following format (known as the FASTQ format):
+● Each piece is represented by four lines:
+○ The first line contains the word @READ_ followed by the piece index. The first
+piece has an index of 1, so its first line would be @READ_1
+○ The second line contains L characters in the {A,C,G,T} alphabet, representing
+the DNA sequence of the piece.
+○ The third line contains the word +READ_ followed by the piece index (e.g.,
++READ_1).
+○ The fourth line contains L characters, representing the quality scores of the
+piece. Each score is represented as an ASCII character in the range 33-96, by adding 33 to the original score. For example, if the original score is 0, it should be represented by the ASCII character 33 (“!”)
+Example input (for L=2) shown here in binary:
+00000000 11100000 11000001 01111111
+Example output:
+@READ_1
+AT
++READ_1
+!A
+@READ_2
+TC
++READ2
+"`
+Please note that input shall be a binary sequence of bytes -- not a string of ‘0’ and ‘1’ characters. An example input file can be downloaded from https://dnanexus.com/ programming_challenges/dna_conversion_samples/input. This example file has 1680 bytes. One can generate different output with different L values. The example output for L = 7, 15, and 80 can also be downloaded from the following locations:
+
+
+You are given a very, very large plain text file where each line contains a plain text string. The file has at most 1 billion lines; lines may have different lengths, but each line has at most 1000 characters. Your goal is to write a program that will print an arbitrary line from the file. Your program will be run many times (although you don't know exactly how many times it will be run in advance), and you don’t know in advance which lines might be selected. Thus, your solution should be optimized to minimize the runtime for each additional execution. The first execution of the program may take longer than subsequent runs, and you may use additional disk storage to improve performance.
+Your program should take two command-line arguments: the path of the file from which to print lines, and the index of the line you want to print. Your program should write the line to standard output.
+Sample input/output:
+input_file.txt:
+apple
+banana
+orange
+lemon
+$ random_line input_file.txt 3
+on stderr: Writing index to input_file.txt.idx... done. lemon
+$ random_line input_file.txt 2
+orange
+$ random_line input_file.txt 0
+apple

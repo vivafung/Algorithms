@@ -5,6 +5,8 @@ import binascii
 import math
 import itertools
 import pickle
+import random
+import sys, getopt
 
 class Solution(object):
 	def import_binary_file(self, filename):
@@ -78,7 +80,7 @@ class Solution(object):
 
 	def assert_size(self, val_1, val_2):
 		return True if (val_1 == val_2) else False
-		
+
 
 	def report_current_index(self, filename):
 		'''For avoiding read all the data into memory, create generator to readline 
@@ -115,11 +117,31 @@ def main():
 	dna_mapping = {"00" : "A", "01" : "C", "10" : "G", "11" : "T"}
 
 	input_file = "Downloads/dna_conversion_samples/input"
-	output_file = "Downloads/dna_conversion_samples/output_vivafung"
+	output_file = "Downloads/dna_conversion_samples/readyforzero_takehome"
 
 	binary_board = obj.import_binary_file(input_file)
 	nucleotide_results, quality_score_results = obj.encode_dna_moculer(dna_mapping, binary_board)
 	pickle.dump(obj.output(CONST_L, nucleotide_results, quality_score_results), open(output_file, "w"))
+
+	if len(sys.argv) == 3:
+		try:
+			filename = str(sys.argv[1])
+			ran_num = int(sys.argv[2])
+			print filename, ran_num
+		except getopt.GetoptError as e:
+			print "Parsing Error....."
+			sys.exit(2)
+	else:
+		print "Please re-enter the correct filename or number of lines....."
+		return False
+
+	file_in = open(output_file, "r")
+	list_len, iter_index = obj.report_current_index(output_file)
+
+	if obj.is_valid_range(ran_num, 1, list_len):
+		obj.print_target(file_in, iter_index, ran_num)
+	else:
+		raise ValueError
 
 
 if __name__ == "__main__":
