@@ -3,22 +3,25 @@
     <script src="long.js"></script>
     <script src="bytebuffer.js"></script>
     <script src="protobuf.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   </head>
   <body>
     <pre id="content"></pre>
     <button onClick="sendMessage()">Hello AXS</button>
     <script type="text/javascript">
-      "use strict";
+        "use strict";
       var ProtoBuf = dcodeIO.ProtoBuf;
 
       let Message = ProtoBuf
         .loadProtoFile('./people.proto', (err, builder)=>{
           Message = builder.build('Message')
+          console.log("====================")
+          console.log(Message)
           loadMessage()
         })
 
-      // let loadMessage = ()=> {
-      //   axios.get('/api/messages', {responseType: 'arraybuffer'})
+      let loadMessage = ()=> {
+      // axios.get('/api/messages', {responseType: 'arraybuffer'})
       //     .then(function (response) {
       //       console.log('Response from the server: ', response)
       //       let msg = Message.decode(response.data)
@@ -28,19 +31,22 @@
       //     .catch(function (response) {
       //       console.log(response)
       //     })
-      // }
-      // let sendMessage = ()=>{
-      //   let msg = new Message({text: 'yo', lang: 'slang'})
-      //   axios.post('/api/messages', msg.toArrayBuffer(),
-      //       { responseType: 'arraybuffer',
-      //       headers: {'Content-Type': 'application/octet-stream'}}
-      //     ).then(function (response) {
-      //       console.log(response)
-      //     })
-      //     .catch(function (response) {
-      //       console.log(response)
-      //     })
-      // }
+      }
+
+      let sendMessage = ()=>{
+        let msg = new Message({ firstName: "vivatest", lastName: "fung", address: "hwgeo;ghweg", mood: "alright"})
+        console.log("====================")
+        // axios.post('/api/messages', msg.toArrayBuffer(),
+        //     { responseType: 'arraybuffer',
+        //     headers: {'Content-Type': 'application/octet-stream'}}
+        //   ).then(function (response) {
+        //     console.log(response)
+        //   })
+        //   .catch(function (response) {
+        //     console.log(response)
+        //   })
+      }
+
     </script>
   </body>
 </html>
