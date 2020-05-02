@@ -62,9 +62,13 @@
       }
 
       let sendMessage = ()=>{
-        let ori_msg = '{"name": "ben", "mood": "playful"}'
+        let ori_msg = '{"name": "benfischer", "mood": "playful"}'
         axios.post('https://0kq0dc8avi.execute-api.us-west-2.amazonaws.com/dev/resource2', ori_msg,
-            {headers: {'Content-Type': 'application/json'}}
+            {headers: {
+              'Content-Type': 'application/json',
+            //   'Accept': 'application/json',
+            'Access-Control-Expose-Headers': 'Access-Control-Allow-Origin,Access-Control-Allow-Headers,Access-Control-Allow-Methods'          
+          }}
           ).then(function (response) {
             console.log(response)
           })

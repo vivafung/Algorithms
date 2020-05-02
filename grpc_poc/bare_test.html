@@ -1,0 +1,75 @@
+<html>
+  <head>
+    <script src="long.js"></script>
+    <script src="bytebuffer.js"></script>
+    <script src="./node_modules/protobufjs/dist/protobuf.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+  <body>
+    <pre id="content"></pre>
+    <button onClick="sendMessage()">Hello AXS</button>
+    <script type="text/javascript">
+        "use strict";
+    // var protobuf = dcodeIO.ProtoBuf;
+
+//     protobuf.load("./people.proto", function(err, root) {
+//     if (err)
+//         throw err;
+ 
+//     // Obtain a message type
+//     var AwesomeMessage = root.lookupType("awesomepackage.AwesomeMessage");
+//     // console.log(AwesomeMessage);
+ 
+//     // Exemplary payload
+//     var payload = { firstName: "vivatest", lastName: "fung", address: "hwgeo;ghweg", mood: "alright"};
+ 
+//     // Create a new message
+//     var message = AwesomeMessage.create(payload); // or use .fromObject if conversion is necessary
+
+//     // Encode a message to an Uint8Array (browser) or Buffer (node)
+//     var buffer = AwesomeMessage.encode(message).finish();
+//     // ... do something with buffer
+ 
+//     // Decode an Uint8Array (browser) or Buffer (node) to a message
+//     var message = AwesomeMessage.decode(buffer);
+
+//     // ... do something with message
+ 
+//     // If the application uses length-delimited buffers, there is also encodeDelimited and decodeDelimited.
+ 
+//     // Maybe convert the message back to a plain object
+//     var object = AwesomeMessage.toObject(message, {
+//        longs: String,
+//         enums: String,
+//         bytes: String
+//        // see ConversionOptions
+//     });
+// });
+
+      let loadMessage = ()=> {
+        axios.get('https://0kq0dc8avi.execute-api.us-west-2.amazonaws.com/dev/resource1', ori_msg)
+          .then(response => {
+            console.log(response.data);
+          })
+          .catch(error => console.error(error));
+      }
+
+      let sendMessage = ()=>{
+        let ori_msg = '{"name": "viva20200501", "mood": "playful", "whataboutme": "profitarole"}'
+        axios.post('https://0kq0dc8avi.execute-api.us-west-2.amazonaws.com/dev/resource2', ori_msg,
+            {headers: {
+              'Content-Type': 'application/json',
+            //   'Accept': 'application/json',
+            'Access-Control-Expose-Headers': '*'          
+          }}
+          ).then(function (response) {
+            console.log(response)
+          })
+          .catch(function (response) {
+            console.log(response) 
+          })
+      }
+
+    </script>
+  </body>
+</html>
